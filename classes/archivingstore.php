@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Driver for storing archive data inside a directory on the local filesystem.
+ * Driver for storing archive data inside a directory on the local filesystem
  *
  * @package     archivingstore_localdir
  * @copyright   2025 Niels Gandraß <niels@gandrass.de>
@@ -31,7 +31,7 @@ defined('MOODLE_INTERNAL') || die(); // @codeCoverageIgnore
 
 
 /**
- * Driver for storing archive data inside a directory on the local filesystem.
+ * Driver for storing archive data inside a directory on the local filesystem
  */
 class archivingstore extends archivingstore_base {
 
