@@ -24,8 +24,6 @@
 
 namespace archivingstore_localdir;
 
-use local_archiving\driver\archivingstore_base;
-
 // @codingStandardsIgnoreFile
 defined('MOODLE_INTERNAL') || die(); // @codeCoverageIgnore
 
@@ -33,7 +31,7 @@ defined('MOODLE_INTERNAL') || die(); // @codeCoverageIgnore
 /**
  * Driver for storing archive data inside a directory on the local filesystem
  */
-class archivingstore extends archivingstore_base {
+class archivingstore extends \local_archiving\driver\store\archivingstore {
 
     /**
      * @inheritDoc archivingstore_base::get_name()
