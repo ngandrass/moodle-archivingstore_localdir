@@ -25,6 +25,8 @@
 namespace archivingstore_localdir;
 
 // @codingStandardsIgnoreFile
+use local_archiving\exception\storage_exception;
+
 defined('MOODLE_INTERNAL') || die(); // @codeCoverageIgnore
 
 
@@ -38,6 +40,52 @@ class archivingstore extends \local_archiving\driver\store\archivingstore {
      */
     public static function get_name(): string {
         return get_string('pluginname', 'archivingstore_localdir');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function get_plugname(): string {
+        return 'localdir';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function is_available(): bool {
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get_free_bytes(): int {
+        // TODO: Implement get_free_bytes() method.
+        return 42;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function store(\stored_file $file, string $path): void {
+        // TODO: Implement store() method.
+        throw new storage_exception('notimplemented', 'archivingstore_localdir');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function retrieve(string $path): \stored_file {
+        // TODO: Implement retrieve() method.
+        throw new storage_exception('notimplemented', 'archivingstore_localdir');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function delete(string $path, bool $strict = false): void {
+        // TODO: Implement delete() method.
+        throw new storage_exception('notimplemented', 'archivingstore_localdir');
     }
 
 }
