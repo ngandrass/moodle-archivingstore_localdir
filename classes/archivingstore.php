@@ -24,9 +24,10 @@
 
 namespace archivingstore_localdir;
 
-// @codingStandardsIgnoreFile
+use local_archiving\driver\store\file_handle;
 use local_archiving\exception\storage_exception;
 
+// @codingStandardsIgnoreFile
 defined('MOODLE_INTERNAL') || die(); // @codeCoverageIgnore
 
 
@@ -34,6 +35,9 @@ defined('MOODLE_INTERNAL') || die(); // @codeCoverageIgnore
  * Driver for storing archive data inside a directory on the local filesystem
  */
 class archivingstore extends \local_archiving\driver\store\archivingstore {
+
+    // FIXME: Remove. This is for development only. Needs to be put into a proper setting.
+    public const LOCAL_DIR = '/app/moodledata/temp/archivingstore_localdir';
 
     /**
      * @inheritDoc archivingstore_base::get_name()
@@ -67,15 +71,37 @@ class archivingstore extends \local_archiving\driver\store\archivingstore {
     /**
      * @inheritDoc
      */
-    public function store(\stored_file $file, string $path): void {
+    public function store(int $jobid, \stored_file $file, string $path): file_handle {
         // TODO: Implement store() method.
-        throw new storage_exception('notimplemented', 'archivingstore_localdir');
+
+        $handle = file_handle::create(
+            $jobid,
+            'localdir',
+            $file->get_filename(),
+            trim($path, '/'),
+            $file->get_filesize()
+        );
+
+        $abstargetpath = self::LOCAL_DIR.'/'.$handle->filepath;
+        if (!is_dir($abstargetpath)) {
+            if (!mkdir($abstargetpath, 0777, true)) {
+                $handle->destroy();
+                throw new storage_exception('filestorefailed', 'local_archiving');
+            }
+        }
+        if (!$file->copy_content_to($abstargetpath.'/'.$file->get_filename())) {
+            $handle->destroy();
+            throw new storage_exception('filestorefailed', 'local_archiving');
+        }
+
+        mtrace('Stored file '.$file->get_filename().' in '.$abstargetpath.'/'.$file->get_filename());
+        return $handle;
     }
 
     /**
      * @inheritDoc
      */
-    public function retrieve(string $path): \stored_file {
+    public function retrieve(file_handle $handle): \stored_file {
         // TODO: Implement retrieve() method.
         throw new storage_exception('notimplemented', 'archivingstore_localdir');
     }
@@ -83,9 +109,21 @@ class archivingstore extends \local_archiving\driver\store\archivingstore {
     /**
      * @inheritDoc
      */
-    public function delete(string $path, bool $strict = false): void {
+    public function delete(file_handle $handle, bool $strict = false): void {
         // TODO: Implement delete() method.
-        throw new storage_exception('notimplemented', 'archivingstore_localdir');
+
+        $filefullpath = self::LOCAL_DIR.'/'.$handle->filepath.'/'.$handle->filename;
+        if (!file_exists($filefullpath)) {
+            if ($strict) {
+                throw new storage_exception('filenotfound', 'error');
+            } else {
+                return;
+            }
+        }
+
+        if (!unlink($filefullpath)) {
+            throw new storage_exception('filedeletefailed', 'local_archiving');
+        }
     }
 
 }
