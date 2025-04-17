@@ -39,38 +39,28 @@ class archivingstore extends \local_archiving\driver\store\archivingstore {
     // FIXME: Remove. This is for development only. Needs to be put into a proper setting.
     public const LOCAL_DIR = '/app/moodledata/temp/archivingstore_localdir';
 
-    /**
-     * @inheritDoc archivingstore_base::get_name()
-     */
+    #[\Override]
     public static function get_name(): string {
         return get_string('pluginname', 'archivingstore_localdir');
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public static function get_plugname(): string {
         return 'localdir';
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function is_available(): bool {
         return true;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function get_free_bytes(): int {
         // TODO: Implement get_free_bytes() method.
         return 42;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function store(int $jobid, \stored_file $file, string $path): file_handle {
         // TODO: Implement store() method.
 
@@ -98,17 +88,13 @@ class archivingstore extends \local_archiving\driver\store\archivingstore {
         return $handle;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function retrieve(file_handle $handle): \stored_file {
         // TODO: Implement retrieve() method.
         throw new storage_exception('notimplemented', 'archivingstore_localdir');
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[\Override]
     public function delete(file_handle $handle, bool $strict = false): void {
         // TODO: Implement delete() method.
 
