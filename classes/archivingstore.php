@@ -24,8 +24,9 @@
 
 namespace archivingstore_localdir;
 
-use local_archiving\driver\store\file_handle;
 use local_archiving\exception\storage_exception;
+use local_archiving\file_handle;
+use local_archiving\storage;
 
 // @codingStandardsIgnoreFile
 defined('MOODLE_INTERNAL') || die(); // @codeCoverageIgnore
@@ -34,7 +35,7 @@ defined('MOODLE_INTERNAL') || die(); // @codeCoverageIgnore
 /**
  * Driver for storing archive data inside a directory on the local filesystem
  */
-class archivingstore extends \local_archiving\driver\store\archivingstore {
+class archivingstore extends \local_archiving\driver\archivingstore {
 
     // FIXME: Remove. This is for development only. Needs to be put into a proper setting.
     public const LOCAL_DIR = '/app/moodledata/temp/archivingstore_localdir';
@@ -69,7 +70,8 @@ class archivingstore extends \local_archiving\driver\store\archivingstore {
             'localdir',
             $file->get_filename(),
             trim($path, '/'),
-            $file->get_filesize()
+            $file->get_filesize(),
+            storage::hash_file($file)
         );
 
         $abstargetpath = self::LOCAL_DIR.'/'.$handle->filepath;
