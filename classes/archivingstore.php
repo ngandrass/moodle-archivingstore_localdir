@@ -51,6 +51,11 @@ class archivingstore extends \local_archiving\driver\archivingstore {
     }
 
     #[\Override]
+    public static function supports_retrieve(): bool {
+        return true;
+    }
+
+    #[\Override]
     public function is_available(): bool {
         return true;
     }
