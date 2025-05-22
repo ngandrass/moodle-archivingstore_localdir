@@ -71,12 +71,12 @@ class archivingstore extends \local_archiving\driver\archivingstore {
         // TODO: Implement store() method.
 
         $handle = file_handle::create(
-            $jobid,
-            'localdir',
-            $file->get_filename(),
-            trim($path, '/'),
-            $file->get_filesize(),
-            storage::hash_file($file)
+            jobid: $jobid,
+            archivingstorename: 'localdir',
+            filename: $file->get_filename(),
+            filepath: trim($path, '/'),
+            filesize: $file->get_filesize(),
+            sha256sum: storage::hash_file($file)
         );
 
         $abstargetpath = self::LOCAL_DIR.'/'.$handle->filepath;
@@ -96,15 +96,26 @@ class archivingstore extends \local_archiving\driver\archivingstore {
     }
 
     #[\Override]
-    public function retrieve(file_handle $handle): \stored_file {
-        // TODO: Implement retrieve() method.
-        throw new storage_exception('notimplemented', 'archivingstore_localdir');
+    public function retrieve(file_handle $handle, \stdClass $fileinfo): \stored_file {
+        // Find locally stored file.
+        $absfilepath = self::LOCAL_DIR.'/'.trim($handle->filepath, '/').'/'.$handle->filename;
+        if (!file_exists($absfilepath)) {
+            throw new storage_exception('filenotfound', 'error');
+        }
+
+        // Transfer file to Moodle file storage.
+        $fs = get_file_storage();
+        $storedfile = $fs->create_file_from_pathname($fileinfo, $absfilepath);
+
+        if (!$storedfile) {
+            throw new storage_exception('filestorefailed', 'local_archiving');
+        }
+
+        return $storedfile;
     }
 
     #[\Override]
     public function delete(file_handle $handle, bool $strict = false): void {
-        // TODO: Implement delete() method.
-
         $filefullpath = self::LOCAL_DIR.'/'.$handle->filepath.'/'.$handle->filename;
         if (!file_exists($filefullpath)) {
             if ($strict) {
