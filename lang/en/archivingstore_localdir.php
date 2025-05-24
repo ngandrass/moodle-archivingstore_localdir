@@ -26,3 +26,7 @@
 
 // Common
 $string['pluginname'] = 'Local Directory';
+
+// Settings.
+$string['setting_enabled'] = 'Enabled';
+$string['setting_enabled_desc'] = 'Enables or disables this storage driver. If disabled, no archives can be sent to or retrieved from this storage.';

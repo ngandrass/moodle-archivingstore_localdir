@@ -27,6 +27,7 @@ namespace archivingstore_localdir;
 use local_archiving\exception\storage_exception;
 use local_archiving\file_handle;
 use local_archiving\storage;
+use local_archiving\type\storage_tier;
 
 // @codingStandardsIgnoreFile
 defined('MOODLE_INTERNAL') || die(); // @codeCoverageIgnore
@@ -39,6 +40,11 @@ class archivingstore extends \local_archiving\driver\archivingstore {
 
     // FIXME: Remove. This is for development only. Needs to be put into a proper setting.
     public const LOCAL_DIR = '/app/moodledata/temp/archivingstore_localdir';
+
+    #[\Override]
+    public static function get_storage_tier(): storage_tier {
+        return storage_tier::LOCAL;
+    }
 
     #[\Override]
     public static function supports_retrieve(): bool {

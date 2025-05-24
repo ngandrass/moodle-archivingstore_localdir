@@ -28,11 +28,16 @@ defined('MOODLE_INTERNAL') || die(); // @codeCoverageIgnore
 global $DB;
 
 if ($hassiteconfig) {
-    $settings = new admin_settingpage('archivingstore_localdir_settings', new lang_string('pluginname', 'archivingstore_localdir'));
+    $settings = new admin_settingpage('archivingstore_localdir', new lang_string('pluginname', 'archivingstore_localdir'));
 
     // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
     if ($ADMIN->fulltree) {
-
+        // Enabled.
+        $settings->add(new admin_setting_configcheckbox('archivingstore_localdir/enabled',
+            get_string('setting_enabled', 'archivingstore_localdir'),
+            get_string('setting_enabled_desc', 'archivingstore_localdir'),
+            '1'
+        ));
     }
 
     // Settingpage is added to tree automatically. No need to add it manually here.
