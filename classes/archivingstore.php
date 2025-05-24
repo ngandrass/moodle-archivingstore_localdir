@@ -41,16 +41,6 @@ class archivingstore extends \local_archiving\driver\archivingstore {
     public const LOCAL_DIR = '/app/moodledata/temp/archivingstore_localdir';
 
     #[\Override]
-    public static function get_name(): string {
-        return get_string('pluginname', 'archivingstore_localdir');
-    }
-
-    #[\Override]
-    public static function get_plugname(): string {
-        return 'localdir';
-    }
-
-    #[\Override]
     public static function supports_retrieve(): bool {
         return true;
     }
