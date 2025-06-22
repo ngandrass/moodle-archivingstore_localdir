@@ -50,13 +50,16 @@ class archivingstore extends \local_archiving\driver\archivingstore {
 
     #[\Override]
     public function is_available(): bool {
-        return true;
+        return ($this->get_free_bytes() ?? 0) > 1024 * 1024 * 1024; // At least 1 GB free space required.
     }
 
     #[\Override]
-    public function get_free_bytes(): int {
-        // TODO: Implement get_free_bytes() method.
-        return 42;
+    public function get_free_bytes(): ?int {
+        try {
+            return disk_free_space($this->get_storage_path()) ?: null;
+        } catch (storage_exception $e) {
+            return null; // If the storage path is not configured or does not exist, return null (unknown).
+        }
     }
 
     #[\Override]
