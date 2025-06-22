@@ -22,6 +22,8 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use local_archiving\local\admin\setting\admin_setting_localabspath;
+
 defined('MOODLE_INTERNAL') || die(); // @codeCoverageIgnore
 
 
@@ -37,6 +39,13 @@ if ($hassiteconfig) {
             get_string('setting_enabled', 'archivingstore_localdir'),
             get_string('setting_enabled_desc', 'archivingstore_localdir'),
             '1'
+        ));
+
+        // Storage path.
+        $settings->add(new admin_setting_localabspath('archivingstore_localdir/storage_path',
+            get_string('setting_storage_path', 'archivingstore_localdir'),
+            get_string('setting_storage_path_desc', 'archivingstore_localdir'),
+            '/var/moodle/archiving',
         ));
     }
 

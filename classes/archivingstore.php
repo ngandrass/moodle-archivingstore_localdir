@@ -38,9 +38,6 @@ defined('MOODLE_INTERNAL') || die(); // @codeCoverageIgnore
  */
 class archivingstore extends \local_archiving\driver\archivingstore {
 
-    // FIXME: Remove. This is for development only. Needs to be put into a proper setting.
-    public const LOCAL_DIR = '/app/moodledata/temp/archivingstore_localdir';
-
     #[\Override]
     public static function get_storage_tier(): storage_tier {
         return storage_tier::LOCAL;
@@ -64,8 +61,7 @@ class archivingstore extends \local_archiving\driver\archivingstore {
 
     #[\Override]
     public function store(int $jobid, \stored_file $file, string $path): file_handle {
-        // TODO: Implement store() method.
-
+        // Prepare file handle.
         $handle = file_handle::create(
             jobid: $jobid,
             archivingstorename: 'localdir',
@@ -75,7 +71,8 @@ class archivingstore extends \local_archiving\driver\archivingstore {
             sha256sum: storage::hash_file($file)
         );
 
-        $abstargetpath = self::LOCAL_DIR.'/'.$handle->filepath;
+        // Create target storage path and write file to it.
+        $abstargetpath = $this->get_storage_path().'/'.$handle->filepath;
         if (!is_dir($abstargetpath)) {
             if (!mkdir($abstargetpath, 0777, true)) {
                 $handle->destroy();
@@ -94,7 +91,7 @@ class archivingstore extends \local_archiving\driver\archivingstore {
     #[\Override]
     public function retrieve(file_handle $handle, \stdClass $fileinfo): \stored_file {
         // Find locally stored file.
-        $absfilepath = self::LOCAL_DIR.'/'.trim($handle->filepath, '/').'/'.$handle->filename;
+        $absfilepath = $this->get_storage_path().'/'.trim($handle->filepath, '/').'/'.$handle->filename;
         if (!file_exists($absfilepath)) {
             throw new storage_exception('filenotfound', 'error');
         }
@@ -112,7 +109,8 @@ class archivingstore extends \local_archiving\driver\archivingstore {
 
     #[\Override]
     public function delete(file_handle $handle, bool $strict = false): void {
-        $filefullpath = self::LOCAL_DIR.'/'.$handle->filepath.'/'.$handle->filename;
+        // Locate target file in local storage.
+        $filefullpath = $this->get_storage_path().'/'.$handle->filepath.'/'.$handle->filename;
         if (!file_exists($filefullpath)) {
             if ($strict) {
                 throw new storage_exception('filenotfound', 'error');
@@ -121,9 +119,32 @@ class archivingstore extends \local_archiving\driver\archivingstore {
             }
         }
 
+        // Delete the file.
         if (!unlink($filefullpath)) {
             throw new storage_exception('filedeletefailed', 'local_archiving');
         }
+    }
+
+    /**
+     * Returns the absolute base path for local file storage
+     *
+     * @return string Absolute path to the local storage root directory
+     * @throws \dml_exception
+     * @throws storage_exception
+     */
+    protected function get_storage_path(): string {
+        $storagepath = get_config('archivingstore_localdir', 'storage_path');
+
+        // Validate storage path.
+        if (!$storagepath) {
+            throw new storage_exception('storagepathnotconfigured', 'archivingstore_localdir');
+        }
+
+        if (!is_dir($storagepath)) {
+            throw new storage_exception('storagepathdoesnotexist', 'archivingstore_localdir');
+        }
+
+        return $storagepath;
     }
 
 }
