@@ -126,6 +126,12 @@ class archivingstore extends \local_archiving\driver\archivingstore {
         if (!unlink($filefullpath)) {
             throw new storage_exception('filedeletefailed', 'local_archiving');
         }
+
+        // Remove parent directory if it is empty.
+        $parentdir = dirname($filefullpath);
+        if (storage::is_dir_empty($parentdir)) {
+            rmdir($parentdir);
+        }
     }
 
     /**
