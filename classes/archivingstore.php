@@ -71,7 +71,8 @@ class archivingstore extends \local_archiving\driver\archivingstore {
             filename: $file->get_filename(),
             filepath: trim($path, '/'),
             filesize: $file->get_filesize(),
-            sha256sum: storage::hash_file($file)
+            sha256sum: storage::hash_file($file),
+            mimetype: $file->get_mimetype()
         );
 
         // Create target storage path and write file to it.
