@@ -88,7 +88,6 @@ class archivingstore extends \local_archiving\driver\archivingstore {
             throw new storage_exception('filestorefailed', 'local_archiving');
         }
 
-        mtrace('Stored file '.$file->get_filename().' in '.$abstargetpath.'/'.$file->get_filename());
         return $handle;
     }
 
