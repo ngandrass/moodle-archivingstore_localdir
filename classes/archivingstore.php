@@ -113,7 +113,8 @@ class archivingstore extends \local_archiving\driver\archivingstore {
     #[\Override]
     public function delete(file_handle $handle, bool $strict = false): void {
         // Locate target file in local storage.
-        $filefullpath = $this->get_storage_path().'/'.$handle->filepath.'/'.$handle->filename;
+        $storagepath = $this->get_storage_path();
+        $filefullpath = $storagepath.'/'.$handle->filepath.'/'.$handle->filename;
         if (!file_exists($filefullpath)) {
             if ($strict) {
                 throw new storage_exception('filenotfound', 'error');
@@ -127,10 +128,21 @@ class archivingstore extends \local_archiving\driver\archivingstore {
             throw new storage_exception('filedeletefailed', 'local_archiving');
         }
 
-        // Remove parent directory if it is empty.
-        $parentdir = dirname($filefullpath);
-        if (storage::is_dir_empty($parentdir)) {
-            rmdir($parentdir);
+        // Remove parent directories if these are empty now.
+        $curdir = dirname($filefullpath);
+        while (str_contains($curdir, $storagepath) && $curdir != $storagepath) {
+            // Make sure the current directory is empty.
+            if (!storage::is_dir_empty($curdir)) {
+                break;
+            }
+
+            // Do not proceede if rmdir fails.
+            if (!rmdir($curdir)) {
+                break;
+            }
+
+            // Advance to the next parent dir.
+            $curdir = dirname($curdir);
         }
     }
 

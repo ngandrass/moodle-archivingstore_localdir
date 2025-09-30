@@ -2,6 +2,8 @@
 
 ## Version X.Y.Z (YYYYMMDDXX)
 
+- Clean up empty subdirectories during file deletion
+- Create unit tests
 - Add Moodle plugin CI for all supported Moodle versions
 
 
