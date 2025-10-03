@@ -26,6 +26,7 @@
 
 // Common
 $string['pluginname'] = 'Local Directory';
+$string['privacy:metadata'] = 'All data stored via this storage driver remains owned by local_archiving and will be handled directly by its privacy API instead.';
 
 // Settings.
 $string['setting_enabled'] = 'Enabled';
