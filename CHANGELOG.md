@@ -1,6 +1,6 @@
 # Changelog
 
-## Version X.Y.Z (YYYYMMDDXX)
+## Version 1.0.0 (2025100300)
 
 - Clean up empty subdirectories during file deletion
 - Add privacy provider class
