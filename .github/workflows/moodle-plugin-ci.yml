@@ -143,7 +143,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Process coverage data via Coveralls
-        if: false # ${{ !cancelled() && matrix.moodle-branch == 'MOODLE_405_STABLE' && matrix.php == '8.3' && matrix.database == 'pgsql' }}
+        if: ${{ !cancelled() && matrix.moodle-branch == 'MOODLE_405_STABLE' && matrix.php == '8.3' && matrix.database == 'pgsql' }}
         uses: coverallsapp/github-action@v2
         with:
           format: clover
