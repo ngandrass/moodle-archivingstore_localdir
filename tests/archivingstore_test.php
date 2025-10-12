@@ -31,7 +31,6 @@ use local_archiving\storage;
  * Tests for the archivingstore_localdir implementation.
  */
 final class archivingstore_test extends \advanced_testcase {
-
     /**
      * Helper to get the test data generator for local_archiving
      *
@@ -251,7 +250,5 @@ final class archivingstore_test extends \advanced_testcase {
                 rmdir($tempdir);
             }
         }
-
     }
-
 }

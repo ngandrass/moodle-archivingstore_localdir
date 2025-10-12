@@ -35,14 +35,16 @@ if ($hassiteconfig) {
     // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
     if ($ADMIN->fulltree) {
         // Enabled.
-        $settings->add(new admin_setting_configcheckbox('archivingstore_localdir/enabled',
+        $settings->add(new admin_setting_configcheckbox(
+            'archivingstore_localdir/enabled',
             get_string('setting_enabled', 'archivingstore_localdir'),
             get_string('setting_enabled_desc', 'archivingstore_localdir'),
             '1'
         ));
 
         // Storage path.
-        $settings->add(new admin_setting_localabspath('archivingstore_localdir/storage_path',
+        $settings->add(new admin_setting_localabspath(
+            'archivingstore_localdir/storage_path',
             get_string('setting_storage_path', 'archivingstore_localdir'),
             get_string('setting_storage_path_desc', 'archivingstore_localdir'),
             '/var/moodle/archiving',

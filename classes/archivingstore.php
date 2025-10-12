@@ -29,7 +29,7 @@ use local_archiving\file_handle;
 use local_archiving\storage;
 use local_archiving\type\storage_tier;
 
-// @codingStandardsIgnoreFile
+// phpcs:ignore
 defined('MOODLE_INTERNAL') || die(); // @codeCoverageIgnore
 
 
@@ -37,7 +37,6 @@ defined('MOODLE_INTERNAL') || die(); // @codeCoverageIgnore
  * Driver for storing archive data inside a directory on the local filesystem
  */
 class archivingstore extends \local_archiving\driver\archivingstore {
-
     #[\Override]
     public static function get_storage_tier(): storage_tier {
         return storage_tier::LOCAL;
@@ -76,14 +75,14 @@ class archivingstore extends \local_archiving\driver\archivingstore {
         );
 
         // Create target storage path and write file to it.
-        $abstargetpath = $this->get_storage_path().'/'.$handle->filepath;
+        $abstargetpath = $this->get_storage_path() . '/' . $handle->filepath;
         if (!is_dir($abstargetpath)) {
             if (!mkdir($abstargetpath, 0777, true)) {
                 $handle->destroy();
                 throw new storage_exception('filestorefailed', 'local_archiving');
             }
         }
-        if (!$file->copy_content_to($abstargetpath.'/'.$file->get_filename())) {
+        if (!$file->copy_content_to($abstargetpath . '/' . $file->get_filename())) {
             $handle->destroy();
             throw new storage_exception('filestorefailed', 'local_archiving');
         }
@@ -94,7 +93,7 @@ class archivingstore extends \local_archiving\driver\archivingstore {
     #[\Override]
     public function retrieve(file_handle $handle, \stdClass $fileinfo): \stored_file {
         // Find locally stored file.
-        $absfilepath = $this->get_storage_path().'/'.trim($handle->filepath, '/').'/'.$handle->filename;
+        $absfilepath = $this->get_storage_path() . '/' . trim($handle->filepath, '/') . '/' . $handle->filename;
         if (!file_exists($absfilepath)) {
             throw new storage_exception('filenotfound', 'error');
         }
@@ -114,7 +113,7 @@ class archivingstore extends \local_archiving\driver\archivingstore {
     public function delete(file_handle $handle, bool $strict = false): void {
         // Locate target file in local storage.
         $storagepath = $this->get_storage_path();
-        $filefullpath = $storagepath.'/'.$handle->filepath.'/'.$handle->filename;
+        $filefullpath = $storagepath . '/' . $handle->filepath . '/' . $handle->filename;
         if (!file_exists($filefullpath)) {
             if ($strict) {
                 throw new storage_exception('filenotfound', 'error');
@@ -167,5 +166,4 @@ class archivingstore extends \local_archiving\driver\archivingstore {
 
         return $storagepath;
     }
-
 }
