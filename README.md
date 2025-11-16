@@ -21,14 +21,15 @@ This plugin is part of the [Moodle archiving subsystem](https://github.com/ngand
 You can find more information about the archiving subsystem in the [official documentation](https://archiving.gandrass.de/).
 
 
-# WARNING: DO NOT USE THIS PLUGIN YET!
+## Features
 
-This plugin is currently under active development. Please do **not use this plugin in production environments** yet!
+- Stores archives in a folder on the local filesystem
+- Storage location is freely configurable
+- Supports store and retrieve operations
+- Can be used to write to external systems (e.g., network share) when mounted by the host system
 
-Once a stable version is released, this warning will be removed.
 
-
-# Installation
+## Installation
 
 Storage drivers (`archivingstore`) are sub-plugins of the archiving subsystem core (`local_archiving`) and therefore
 require the core plugin to be installed. They then must be placed inside your Moodle directory under
